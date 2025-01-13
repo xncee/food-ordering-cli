@@ -53,7 +53,7 @@ public class CustomerPanel {
             case 4: {
                 System.out.println("Enter restaurantId: ");
                 int restaurantId = sc.nextInt();
-                restaurantController.displayMenu(restaurantId);
+                RestaurantPage restaurantPage = new RestaurantPage(restaurantId);
                 break;
             }
             case 5: {
