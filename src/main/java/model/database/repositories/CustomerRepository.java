@@ -39,6 +39,27 @@ public class CustomerRepository implements IRepository<Customer> {
         return null;
     }
 
+    public Customer getByUsername(String username) {
+        String query = "SELECT * FROM Customers c " +
+                "INNER JOIN Users u ON c.customerId = u.id " +
+                "LEFT JOIN Preferences p ON c.preferencesId = p.id " +
+                "LEFT JOIN ShoppingCarts s ON c.shoppingCartId = s.cartId " +
+                "WHERE u.username = ?";
+        try (Connection connection = databaseManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return mapResultSetToCustomer(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;  // Return null if no customer is found
+    }
+
     @Override
     public List<Customer> getAll() {
         String query = "SELECT * FROM Customers c " +
@@ -83,8 +104,8 @@ public class CustomerRepository implements IRepository<Customer> {
                 String customerQuery = "INSERT INTO Customers (customerId, preferencesId, shoppingCartId) VALUES (?, ?, ?)";
                 try (PreparedStatement customerStmt = connection.prepareStatement(customerQuery)) {
                     customerStmt.setInt(1, userId);
-                    customerStmt.setInt(2, customer.getPreferences().getId());
-                    customerStmt.setInt(3, customer.getShoppingCart().getCartId());
+                    customerStmt.setObject(2, (customer.getPreferences() == null) ? null : customer.getPreferences().getId(), java.sql.Types.INTEGER);
+                    customerStmt.setObject(3, (customer.getShoppingCart() == null) ? null : customer.getShoppingCart().getCartId(), java.sql.Types.INTEGER);
                     customerStmt.executeUpdate();
                 }
             }
