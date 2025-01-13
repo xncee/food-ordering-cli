@@ -1,5 +1,8 @@
 package dto;
 
+import model.users.Customer;
+import view.CustomerPanel;
+
 public class UserDTO {
     private String id; // Optional during creation
     private String username;
@@ -7,6 +10,7 @@ public class UserDTO {
     private String phoneNumber;
     private String fullName;
     private String password;
+    private Customer customer;
 
     private UserDTO(Builder builder) {
         this.id = builder.id;
@@ -15,6 +19,7 @@ public class UserDTO {
         this.phoneNumber = builder.phoneNumber;
         this.fullName = builder.fullName;
         this.password = builder.password;
+        this.customer = builder.customer;
     }
 
     public static Builder builder() {
@@ -28,6 +33,7 @@ public class UserDTO {
         private String phoneNumber;
         private String fullName;
         private String password;
+        private Customer customer;
 
         public Builder id(String id) {
             this.id = id;
@@ -59,6 +65,10 @@ public class UserDTO {
             return this;
         }
 
+        public Builder customer(Customer customer) {
+            this.customer = customer;
+            return this;
+        }
         public UserDTO build() {
             return new UserDTO(this);
         }
@@ -90,5 +100,13 @@ public class UserDTO {
 
     public String getPassword() {
         return password;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

@@ -3,19 +3,26 @@ package view;
 import controllers.SignInController;
 import controllers.SignUpController;
 import dto.UserDTO;
+import model.users.Customer;
 
 import java.util.Scanner;
 import java.util.Set;
 
 import static view.PageService.getChoice;
+import static view.PageService.waitFor;
 
 public class CustomerLoginPage {
     private final Scanner sc = new Scanner(System.in);
     private final SignInController signInController = new SignInController();
     private final SignUpController signUpController = new SignUpController();
+    private boolean isLoggedIn;
+    public Customer currentCustomer;
 
     public void show() {
-        System.out.println("# Customer Login Page");
+        waitFor(1);
+        if (isLoggedIn) return;
+
+        System.out.println("\n# Customer Login Page");
         System.out.println("1. SignIn");
         System.out.println("2. SignUp");
         int choice = getChoice(Set.of(1, 2));
@@ -35,6 +42,8 @@ public class CustomerLoginPage {
                 boolean success = signInController.signIn(userDTO);
                 if (success) {
                     System.out.println("Sign-In Successful! Welcome, " + username + "!");
+                    isLoggedIn = true;
+                    currentCustomer = userDTO.getCustomer();
                 } else {
                     System.out.println("Sign-In Failed! Please check your username or password.");
                 }
@@ -69,5 +78,6 @@ public class CustomerLoginPage {
                 break;
             }
         }
+        show();
     }
 }

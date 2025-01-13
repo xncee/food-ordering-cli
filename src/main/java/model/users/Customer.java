@@ -15,7 +15,7 @@ public class Customer extends User {
         private List<CreditCard> creditCards = new ArrayList<>();
         private List<Order> orderHistory = new ArrayList<>();
 
-        public CustomerBuilder(int id, String username, String fullName, String email, String phoneNumber, String hashedPassword) {
+        public CustomerBuilder(Integer id, String username, String fullName, String email, String phoneNumber, String hashedPassword) {
             super(id, UserType.CUSTOMER.toString(), username, fullName, email, phoneNumber, hashedPassword);
         }
 

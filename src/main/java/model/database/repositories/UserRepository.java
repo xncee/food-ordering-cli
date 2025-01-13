@@ -24,7 +24,7 @@ public class UserRepository {
                 String storedHashedPassword = rs.getString("hashedPassword");
 
                 try {
-                    return Hashing.match(password, storedHashedPassword);
+                    return Hashing.match(storedHashedPassword, password);
                 }
                 catch (Exception e) {
                     throw new DatabaseOperationException("An Error occurred while matching password in 'authUser' method.", e);
@@ -40,7 +40,13 @@ public class UserRepository {
 
     public boolean isUsernameAvailable(String username) {
         String sql = "SELECT username FROM USERS WHERE username = ?";
+        try (Connection conn = databaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        return true;
+            ResultSet rs = stmt.executeQuery();
+            return !rs.next();
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("An error occurred while checking username availability in 'UserRepository.isUsernameAvailable()' method.", e);
+        }
     }
 }
