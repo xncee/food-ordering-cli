@@ -20,6 +20,7 @@ public class Application {
     }
     private void setupDatabase() {
         try {
+            //System.out.println(Dotenv.load().get("DATABASE_URL"));
             DatabaseManager dbFacade = DatabaseManager.getInstance(Dotenv.load().get("DATABASE_URL"));
             if (!dbFacade.isConnected()) {
                 Logger.getLogger(Application.class.getName()).log(Level.SEVERE, "Failed to connect to database");
