@@ -4,6 +4,8 @@ import model.Item;
 import model.database.repositories.ItemRepository;
 import model.database.repositories.RestaurantRepository;
 import model.exceptions.DatabaseOperationException;
+import model.users.Restaurant;
+import view.RestaurantPage;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -14,6 +16,17 @@ public class RestaurantController {
     private final ItemRepository itemRepo = new ItemRepository();
 
 
+    public Restaurant getRestaurant(int restaurantId) {
+        Restaurant restaurant = null;
+        try {
+            restaurant = restaurantRepo.getById(restaurantId);
+        }
+        catch (DatabaseOperationException e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Failed to fetch restaurant.", e);
+        }
+
+        return restaurant;
+    }
     public List<Item> getMenu(int restaurantId) {
         List<Item> menu = null;
         try {
@@ -27,6 +40,7 @@ public class RestaurantController {
     }
     public void displayMenu(int restaurantId) {
         List<Item> menu = getMenu(restaurantId);
+        System.out.println("# MENU #");
         for (Item item: menu) {
             System.out.println("\nID: "+item.getItemId());
             System.out.println("\tCategory: "+item.getCategory());
