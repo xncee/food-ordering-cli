@@ -41,11 +41,11 @@ public class CustomerLoginPage {
 
                 boolean success = signInController.signIn(userDTO);
                 if (success) {
-                    System.out.println("Sign-In Successful! Welcome, " + username + "!");
+                    System.out.println("<#> Sign-In Successful! Welcome, " + username + "!");
                     isLoggedIn = true;
                     currentCustomer = userDTO.getCustomer();
                 } else {
-                    System.out.println("Sign-In Failed! Please check your username or password.");
+                    System.out.println("<!> Sign-In Failed! Please check your username or password.");
                 }
                 break;
             }
@@ -71,9 +71,9 @@ public class CustomerLoginPage {
 
                 boolean success = signUpController.signUp(userDTO);
                 if (success) {
-                    System.out.println("Sign-Up Successful! You can now log in.");
+                    System.out.println("<#> Sign-Up Successful! You can now log in.");
                 } else {
-                    System.out.println("Sign-Up Failed! Please try again.");
+                    System.out.println("<!> Sign-Up Failed! Please try again.");
                 }
                 break;
             }

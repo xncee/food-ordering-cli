@@ -6,6 +6,7 @@ import model.database.repositories.CustomerRepository;
 import model.users.Customer;
 import view.CustomerLoginPage;
 import view.CustomerPanel;
+import view.MainPage;
 
 import javax.crypto.Cipher;
 import java.util.logging.Level;
@@ -19,10 +20,7 @@ public class Application {
 
     }
     private void start() {
-        CustomerLoginPage customerLoginPage = new CustomerLoginPage();
-        customerLoginPage.show();
-        CustomerPanel customerPanel = new CustomerPanel(customerLoginPage.currentCustomer);
-        customerPanel.show();
+        MainPage mainPage = new MainPage();
     }
     private void setupDatabase() {
         try {

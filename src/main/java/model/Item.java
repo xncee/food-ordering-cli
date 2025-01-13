@@ -1,16 +1,15 @@
 package model;
 
 import model.enums.ItemCategory;
-import model.users.Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Item {
     public static class ItemBuilder {
-        private final String itemId;
-        private final Restaurant restaurant;
-        private final ItemCategory category;
+        private final Integer itemId;
+        private final Integer restaurantId;
+        private final String category;
         private final String title;
         private final double price;
 
@@ -22,9 +21,9 @@ public class Item {
         private double finalPrice;
         private boolean isAvailable = true;
 
-        public ItemBuilder(String itemId, Restaurant restaurant, ItemCategory category, String title, double price) {
+        public ItemBuilder(Integer itemId, Integer restaurantId, String category, String title, double price) {
             this.itemId = itemId;
-            this.restaurant = restaurant;
+            this.restaurantId = restaurantId;
             this.category = category;
             this.title = title;
             this.price = price;
@@ -70,9 +69,9 @@ public class Item {
         }
     }
 
-    private String itemId;
-    private Restaurant restaurant;
-    private ItemCategory category;
+    private Integer itemId;
+    private Integer restaurantId;
+    private String category;
     private List<String> tags;
     private String image;
     private String title;
@@ -87,7 +86,7 @@ public class Item {
     // Private constructor to enforce the use of the ItemBuilder
     private Item(ItemBuilder itemBuilder) {
         this.itemId = itemBuilder.itemId;
-        this.restaurant = itemBuilder.restaurant;
+        this.restaurantId = itemBuilder.restaurantId;
         this.category = itemBuilder.category;
         this.tags = itemBuilder.tags;
         this.image = itemBuilder.image;
@@ -98,5 +97,101 @@ public class Item {
         this.discount = itemBuilder.discount;
         this.finalPrice = itemBuilder.finalPrice;
         this.isAvailable = itemBuilder.isAvailable;
+    }
+
+    public Integer getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Integer itemId) {
+        this.itemId = itemId;
+    }
+
+    public Integer getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(Integer restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<String> getCustomizations() {
+        return customizations;
+    }
+
+    public void setCustomizations(List<String> customizations) {
+        this.customizations = customizations;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public double getFinalPrice() {
+        return finalPrice;
+    }
+
+    public void setFinalPrice(double finalPrice) {
+        this.finalPrice = finalPrice;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
     }
 }

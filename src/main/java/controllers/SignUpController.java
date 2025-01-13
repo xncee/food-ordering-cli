@@ -25,6 +25,10 @@ public class SignUpController {
             System.out.println("<!> Username: " + Messages.THIS_FIELD_IS_REQUIRED.getMessage());
             valid = false;
         }
+        else if (!FieldsValidator.validateUsername(userDTO.getUsername())) {
+            System.out.println("<!> Username: " + Messages.USERNAME_REQUIREMENTS_NOT_MET.getMessage());
+            valid = false;
+        }
         else if (!userRepo.isUsernameAvailable(userDTO.getUsername())) {
             System.out.println("<!> Username: " + Messages.USERNAME_TAKEN.getMessage());
             valid = false;
@@ -39,14 +43,22 @@ public class SignUpController {
             System.out.println("<!> Email: " + Messages.EMAIL_REQUIREMENTS_NOT_MET.getMessage());
             valid = false;
         }
-        else  if (!userRepo.isUsernameAvailable(userDTO.getEmail())) {
+        else  if (!userRepo.isEmailAvailable(userDTO.getEmail())) {
             System.out.println("<!> Email: " + Messages.EMAIL_ALREADY_REGISTERED.getMessage());
             valid = false;
         }
 
         // Phone Number Validation
-
-
+        
+        // Password Validation
+        if (userDTO.getPassword().isBlank()) {
+            System.out.println("<!> Password: " + Messages.THIS_FIELD_IS_REQUIRED.getMessage());
+            valid = false;
+        }
+        else if (!FieldsValidator.validatePassword(userDTO.getPassword())) {
+            System.out.println("<!> Password: " + Messages.PASSWORD_REQUIREMENTS_NOT_MET.getMessage());
+            valid = false;
+        }
 
         return valid;
     }

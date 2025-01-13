@@ -13,6 +13,7 @@ import java.util.List;
 
 public class RestaurantRepository implements IRepository<Restaurant> {
     private static final DatabaseManager databaseManager = DatabaseManager.getInstance();
+    private static final ItemRepository itemRepo = new ItemRepository();
 
     @Override
     public Restaurant getById(int id) throws DatabaseOperationException {
@@ -54,20 +55,45 @@ public class RestaurantRepository implements IRepository<Restaurant> {
 
     @Override
     public void save(Restaurant entity) throws DatabaseConnectionException {
-        String query = "INSERT INTO Restaurants (restaurantId, restaurantCategory, restaurantName, description, " +
-                "location, rating, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = databaseManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        String userQuery = "INSERT INTO Users (userType, username, fullName, email, phoneNumber, hashedPassword, balance) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-            preparedStatement.setInt(1, entity.getId());
-            preparedStatement.setString(2, entity.getRestaurantCategory());
-            preparedStatement.setString(3, entity.getRestaurantName());
-            preparedStatement.setString(4, entity.getDescription());
-            preparedStatement.setString(5, entity.getLocation());
-            preparedStatement.setFloat(6, entity.getRating());
-            preparedStatement.setString(7, entity.getImage());
+        try (Connection connection = databaseManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(userQuery, Statement.RETURN_GENERATED_KEYS)) {
+
+            // Insert into Users table
+            preparedStatement.setString(1, entity.getUserType());
+            preparedStatement.setString(2, entity.getUsername());
+            preparedStatement.setString(3, entity.getFullName());
+            preparedStatement.setString(4, entity.getEmail());
+            preparedStatement.setString(5, entity.getPhoneNumber());
+            preparedStatement.setString(6, entity.getHashedPassword());
+            preparedStatement.setDouble(7, entity.getBalance());
 
             preparedStatement.executeUpdate();
+
+            // Retrieve the generated user ID
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            if (rs.next()) {
+                int userId = rs.getInt(1); // Get the generated userId
+                entity.setId(userId);
+
+                // Insert into Restaurants table
+                String restaurantQuery = "INSERT INTO Restaurants (restaurantId, restaurantCategory, restaurantName, description, " +
+                        "location, rating, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+                try (PreparedStatement restaurantStmt = connection.prepareStatement(restaurantQuery)) {
+                    restaurantStmt.setInt(1, userId); // Use userId as the restaurantId
+                    restaurantStmt.setString(2, entity.getRestaurantCategory());
+                    restaurantStmt.setString(3, entity.getRestaurantName());
+                    restaurantStmt.setString(4, entity.getDescription());
+                    restaurantStmt.setString(5, entity.getLocation());
+                    restaurantStmt.setFloat(6, entity.getRating());
+                    restaurantStmt.setString(7, entity.getImage());
+
+                    restaurantStmt.executeUpdate();
+                }
+            }
         } catch (SQLException e) {
             throw new DatabaseOperationException("An error occurred while saving a restaurant in method 'RestaurantRepository.save()'.", e);
         }
